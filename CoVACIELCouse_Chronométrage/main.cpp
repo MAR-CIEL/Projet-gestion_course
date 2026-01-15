@@ -1,8 +1,10 @@
 #include <iostream>
+#include "CChronomètre.h"
 
 using namespace std;
 
 int main()
 {
-	cout << "Hello world" << endl;
+	CChronomètre chrono;
+	chrono.AfficherTemps();
 }
