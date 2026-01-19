@@ -7,5 +7,7 @@ private:
 	int dixiemeSecondes;
 public:
 	void AfficherTemps();
+	void CalculerTempsCourse();
+	void FonctionTest();
 };
 
