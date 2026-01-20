@@ -1,65 +1,59 @@
-#include "CChronomètre.h"
-#include <chrono>
-#include <iomanip>
-#include <iostream>
-#include <string>
-#include <thread>
+#include "CChronomètre.h" // Fichier d'en tête
+#include <chrono> // Pour le temps (high_resolution_clock, duration)
+#include <conio.h> // Pour le kbhit et le getch
+#include <iomanip> // Pour le setprecision
+#include <iostream> // Pour les cin, cout, getline
+#include <string> // Pour créer des variables string
+#include <windows.h> // Pour Sleep
 
 using namespace std;
 using namespace std::chrono;
-
-void CChronomètre::AfficherTemps()
-{
-	cout << "Nombre de minutes: ";
-	cin >> minutes;
-	cout << "Nombre de secondes: ";
-	cin >> secondes;
-	cout << "Nombre de dixièmes de secondes: ";
-	cin >> dixiemeSecondes;
-	cout << "Temps: " << minutes << " : " << secondes << " : " << dixiemeSecondes << endl;
-}
 
 int CChronomètre::EnregistrementVoiture()
 {
 	// Demander à l'utilisateur de rentrer le nombre de voitures qui vont participer à la course
 	cout << "Combien de voitures vont participer à la course?";
 	cin >> nombreVoitures;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cin.ignore((numeric_limits<streamsize>::max)(), '\n');
 
 	return nombreVoitures;
 }
 
 void CChronomètre::CalculerTempsCourse()
 {
-	string a;
 	// Demander à l'utilisateur d'appuyer sur Entree pour demarrer la course
-	cout << "La course va commencer. Appuie sur Entree pour enclencher le top depart!" << endl;
-	getline(cin, a);
+	cout << "La course va commencer. Appuie sur Entrée pour enclencher le top départ!" << endl;
+	_getch();
 	
 	// Démarrer le chrono
 	auto start = high_resolution_clock::now();
 
-	// Faire une boucle qui en continue va afficher le temps de la course
+	for (int i = 0; i < nombreVoitures; i++) 	// Boucle gérant le chrono en fonction du nombre de voitures participant à la course
+	{
+		// Demander à l'utilisateur d'appuyer sur Entree à chaque fois qu'une voiture franchie la ligne d'arrivée
+		cout << "Course en cours... Appuie sur Entrée à chaque fois qu'une voiture franchie la ligne d'arrivée." << endl; 
+		
+		while (!_kbhit()) // Tant que aucune touche n'est pressée, le chrono défile
+		{
+			// Variables servant pour les calculs de temps
+			auto actualTimer = high_resolution_clock::now();
+			duration<double> diffTimer = actualTimer - start;
+			double tempsTotal = diffTimer.count();
 
-	// Demander à l'utilisateur d'appuyer sur Entree à chaque fois qu'une voiture franchie la ligne d'arrivée (faire une boucle en fonction du nombre de voitures)
-	cout << "Course en cours... Appuie sur Entree à chaque fois qu'une voiture franchie la ligne d'arrivée." << endl;
-	getline(cin, a);
-	auto end_car = high_resolution_clock::now();
-	duration<double> diff_car = end_car - start;
-	cout << "Temps : " << fixed << setprecision(3) << diff_car.count() << " s" << endl;
+			minutes = static_cast<int>(tempsTotal) / 60; // Calcul du nombre de minutes
+			secondes = static_cast<int>(tempsTotal) % 60; // Calcul du nombre de secondes
+			milliemesSecondes = static_cast<int>((tempsTotal - static_cast<int>(tempsTotal)) * 1000); // Calcul du nombre de millièmes de secondes
 
+			// Affichage du chrono de la couse
+			cout << "\rTemps : " << setfill('0') << setw(2) << minutes << " min : " << setfill('0') << setw(2) << secondes << " s : " << setfill('0') << setw(3) << milliemesSecondes << " ms" << flush;
+			Sleep(10); // Pause de 10 ms pour éviter de surcharger le processeur
+		}
+		_getch();
 
-	// Arrêter le chrono (quand la dernière voiture passe la ligne d'arrivée)
-	cout << "Course en cours... Appuie sur Entree quand la dernière voiture atteins la ligne d'arrivée pour arrêter le chrono." << endl;
-	getline(cin, a);
-	auto end = high_resolution_clock::now();
-
-	// Calculer la durée en secondes
-	duration<double> diff = end - start;
-
-	// Afficher le temps
-	cout << "Temps : " << fixed << setprecision(3) << diff.count() << " s" << endl;
-
+		// Affichage du chrono de chaque voiture
+		cout << "\nVoiture " << i + 1 << " : " << setfill('0') << setw(2) << minutes << " min : " << setfill('0') << setw(2) << secondes << " s : " << setfill('0') << setw(3) << milliemesSecondes << " ms" << endl;
+	}
+	cout << "Fin de la course!" << endl;
 }
 
 void CChronomètre::FonctionTest()
