@@ -1,0 +1,43 @@
+/* Style global pour le Dashboard COVACIEL 2026 */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style des cartes de télémétrie */
+.card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+/* Alertes critiques (Règlement Art. 6 - Immobilisation) */
+.critical-alert {
+    color: #e74c3c;
+    font-weight: bold;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% { opacity: 0; }
+}
+
+/* Zone Vidéo OpenCV */
+#video-feed {
+    border-radius: 0 0 12px 12px;
+    background-color: #000;
+    min-height: 300px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Badge de statut */
+.status-badge {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+}
