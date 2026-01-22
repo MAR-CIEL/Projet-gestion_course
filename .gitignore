@@ -2,6 +2,9 @@
 # Ce fichier .gitignore a été automatiquement créé par Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
-/CoVACIELCouse_Chronométrage/.vs/CoVACIELCouse_Chronométrage
-/CoVACIELCouse_Chronometrage
+.vs/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+/doc/html/

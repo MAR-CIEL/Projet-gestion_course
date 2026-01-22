@@ -24,6 +24,7 @@
     <ProjectGuid>{4175c33e-85bc-4796-9fa5-2277a96b9512}</ProjectGuid>
     <RootNamespace>CoVACIELCouseChronométrage</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>CoVACIELCourse_Chronometrage</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
