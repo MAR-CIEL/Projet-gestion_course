@@ -1,44 +1,38 @@
-# Version final du script prototype de collecte des données télémétriques
-# Tâche ID 14 : Ecoute le module XBEE (PAN-ID 1234, Canal C) et enregistre les trames en BDD
-import serial
+import requests
 import mysql.connector
 import time
+import random 
 
-# Configuration XBEE et BDD
-config = {
-    'serial_port': 'COM3', # A adapter selon le PC
-    'baud': 9600, # A adapter selon le baud rate à utiliser
-    'db': {
-        'host': 'localhost',
-        'user': 'root',
-        'password': '',
-        'database': 'covaciel_gestion' # A adapter selon le nom de la BDD données par le technicien concerné
-    }
-}
+# Configuration BDD locale
+DB_CONFIG = {'host': 'localhost', 'user': 'root', 'password': '', 'database': 'covaciel_gestion'}
 
-def listen_telemetry():
-    try:
-        conn = mysql.connector.connect(**config['db'])
-        cursor = conn.cursor()
-        ser = serial.Serial(config['serial_port'], config['baud'], timeout=1)
-        print("Réception télémétrie active...")
+def archive_data():
+    print("Démarrage du simulateur de télémétrie...")
+    while True:
+        try:
+            # --- BLOC SIMULATION ---
+            data = {
+                "vitesse": random.randint(0, 45),
+                "tension_batterie": round(random.uniform(6.0, 7.2), 2),
+                "consommation": round(random.uniform(0.5, 3.5), 2),
+                "obstacle": random.choice([0, 1]),
+                "sens": random.choice(["AV", "AR"])
+            }
+            # -----------------------
 
-        while True:
-            if ser.in_waiting > 0:
-                # Lecture de la trame type: ID:1;V:15.2;B:7.1;C:2.1
-                raw_line = ser.readline().decode('utf-8').strip()
-                try:
-                    parts = dict(item.split(":") for item in raw_line.split(";"))
-                    
-                    sql = "INSERT INTO telemetrie (id_voiture, vitesse, tension_batterie, consommation) VALUES (%s, %s, %s, %s)"
-                    cursor.execute(sql, (parts['ID'], parts['V'], parts['B'], parts['C']))
-                    conn.commit()
-                    print(f"Voiture {parts['ID']} : {parts['V']} km/h enregistrée.")
-                except Exception as e:
-                    print(f"Erreur trame : {e}")
-            time.sleep(0.1)
-    except Exception as e:
-        print(f"Erreur critique : {e}")
+            # Insertion BDD
+            conn = mysql.connector.connect(**DB_CONFIG)
+            cursor = conn.cursor()
+            sql = "INSERT INTO telemetrie (id_voiture, vitesse, tension_batterie, consommation, obstacle, sens) VALUES (1, %s, %s, %s, %s, %s)"
+            cursor.execute(sql, (data['vitesse'], data['tension_batterie'], data['consommation'], data['obstacle'], data['sens']))
+            conn.commit()
+            conn.close()
+            
+            print(f"Archivé : {data['vitesse']} km/h | Batt: {data['tension_batterie']}V")
+
+        except Exception as e:
+            print(f"Erreur : {e}")
+        time.sleep(1)
 
 if __name__ == "__main__":
-    listen_telemetry()
+    archive_data()
