@@ -46,6 +46,13 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('txt-conso').innerText = data.consommation + " A";
         document.getElementById('txt-obstacle').innerText = (parseInt(data.obstacle) === 1) ? "DÉTECTÉ" : "Néant";
 
+        // Mise à jour chrono
+        const chronoElem = document.getElementById('txt-chrono');
+        if (chronoElem)
+        {
+            chronoElem.innerText = data.chrono;
+        }
+        
         // Alerte clignotante Art. 6
         const vElem = document.getElementById('txt-vitesse');
         if (parseFloat(data.vitesse) === 0) {

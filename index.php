@@ -28,20 +28,21 @@
                                 <h6>Vitesse</h6>
                                 <h2 id="txt-vitesse">0 km/h</h2>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <h6>Temps</h6>
                                 <h2 id="txt-chrono">0min:0s:0ms</h2>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <h6>Énergie</h6>
                                 <div class="progress">
-                                    <div id="barre-energie" class="progress-bar bg-success" style="width: 100%">100%</div>
+                                    <div id="barre-energie" class="progress-bar bg-success" style="width: 100%">100%
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                    <canvas id="chart-speed" height="150"></canvas>
+                <canvas id="chart-speed" height="150"></canvas>
             </div>
 
             <div class="col-md-6">
@@ -56,4 +57,5 @@
         </div>
     </div>
 </body>
+
 </html>
