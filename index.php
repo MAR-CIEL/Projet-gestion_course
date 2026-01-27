@@ -21,50 +21,39 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white">État du Véhicule (Télémétrie)</div>
+                    <div class="card-header bg-primary text-white">Informations Spectateurs</div>
                     <div class="card-body text-center">
                         <div class="row">
                             <div class="col-md-3">
                                 <h6>Vitesse</h6>
                                 <h2 id="txt-vitesse">0 km/h</h2>
                             </div>
+                            <div class="col-md-3">
+                                <h6>Temps</h6>
+                                <h2 id="txt-chrono">0min:0s:0ms</h2>
+                            </div>
                             <div class="col-md-6">
                                 <h6>Énergie</h6>
                                 <div class="progress">
-                                    <div id="barre-energie" class="progress-bar bg-success" style="width: 100%">100%
-                                    </div>
-                                </div>
-                            </div>
-                            <canvas id="chart-speed" height="150"></canvas>
-                            <div class="col-md-6">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-danger text-white">Caméra Embarquée</div>
-                                    <div class="card-body p-0 bg-black">
-                                        <img id="video-feed" src="http://192.168.1.50:8080/stream.mjpg"
-                                            onerror="this.src='img/no-signal.jpg';" style="width:100%;">
-                                    </div>
+                                    <div id="barre-energie" class="progress-bar bg-success" style="width: 100%">100%</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                    <canvas id="chart-speed" height="150"></canvas>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-danger text-white">Caméra Embarquée</div>
+                    <div class="card-body p-0 bg-black">
+                        <img id="video-feed" src="http://192.168.1.50:8080/stream.mjpg"
+                            onerror="this.src='img/no-signal.jpg';" style="width:100%;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <h3>Temps</h3>
-    <?php
-    $chemin_exe = __DIR__ . "/CoVACIELCourse_Chronometrage/x64/Debug/CoVACIELCourse_Chronometrage.exe";
-    $command = '"' . $chemin_exe . '" 2>&1';
-    $output = shell_exec($command);
-
-    if ($output === null) {
-        echo "<p style='color:red;'>Erreur : Impossible d'exécuter le programme.</p>";
-    } else {
-        echo "<pre>Résultat programme : " . htmlspecialchars($output) . "</pre>";
-    }
-    ?>
-    <h3>Infos Spectateurs</h3>
-
 </body>
-
 </html>
