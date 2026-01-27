@@ -11,6 +11,8 @@
     - **COVACIELCourse_Chronométrage.sln**: Fichier solution du programme
     - **COVACIELCourse_Chronométrage.vcxproj(.filters)**: Fichiers projets du programme
     - **vc140.pdb**: Je sais pas (à ne pas toucher)
+  - Partie **Affichage UI**
+    - **index.php**: Fichier servant à afficher les données liées au temps et aux infos spectateurs
   - **.gitignore**: Ignore des fichiers qui ne doivent pas être commités
   - **README.md**: Ce fichier même, servant à décrire l'utilisation de cette branche du projet CoVACIEL
   - **workspace.code-workspace**: Je sais pas (à ne pas toucher)
