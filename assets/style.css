@@ -1,43 +1,15 @@
-/* Style global pour le Dashboard COVACIEL 2026 */
-body {
-    background-color: #f4f7f6;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+body { background-color: #f4f7f6; font-family: sans-serif; }
+.card { border-radius: 12px; transition: transform 0.2s; }
 
-/* Style des cartes de télémétrie */
-.card {
-    border: none;
-    border-radius: 12px;
-    transition: transform 0.2s;
-}
-
-.card:hover {
-    transform: scale(1.02);
-}
-
-/* Alertes critiques (Règlement Art. 6 - Immobilisation) */
+/* Animation pour l'arrêt du véhicule */
 .critical-alert {
-    color: #e74c3c;
+    color: #e74c3c !important;
     font-weight: bold;
     animation: blinker 1s linear infinite;
 }
 
-@keyframes blinker {
-    50% { opacity: 0; }
-}
+@keyframes blinker { 50% { opacity: 0; } }
 
-/* Zone Vidéo OpenCV */
-#video-feed {
-    border-radius: 0 0 12px 12px;
-    background-color: #000;
-    min-height: 300px;
-    display: block;
-    margin: 0 auto;
-}
+#video-feed { background-color: #000; min-height: 300px; width: 100%; }
 
-/* Badge de statut */
-.status-badge {
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9em;
-}
+#txt-obstacle { font-size: 28px; margin-top: 10px; }
