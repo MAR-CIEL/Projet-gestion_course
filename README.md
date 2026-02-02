@@ -1,42 +1,47 @@
-# COVACIEL 2026 Simulation Full Locale (WAMP) Télémétrie & UX
-### Cette solution deviendra obsolète au vu de sa prochaine évolution vers d'autres technologies plus avancées pour le projet (plus de BDD en local)
+# COVACIEL 2026 Simulation Solution Finale Télémétrie & UX
 ## Résumé Général du Processus :
 	* Script Simulateur Python remplace la voiture réelle :
-		* Génère chaque seconde des données télémétriques aléatoires mais cohérentes
-		* Se connecte immédiatement au serveur MySQL local (WAMP) pour insérer ces valeurs dans la table "telemetrie" de la BDD créée initialement
-	* API PHP de distribution sert de "serveur de données" pour l'interface web :
-		* Interroge la BDD pour récupérer uniquement la toute dernière ligne enregistrée (la plus récente)
-		* Transforme ces informations brutes en format JSON (facilement compris par le navigateur)
-	* Affichage sur le Dashboard web, la partie visible qui valide les tâches ID 15 et 24 (Recette) :
-		* Script JavaScript appelle l'API PHP toutes les secondes
-		* Actualise les compteurs, la barre d'énergie et dessine la courbe en temps réel avec Chart.js (toutes les secondes)
-		* Si la vitesse est à 0, il déclenche l'alerte clignotante rouge définie dans le CSS principal
-		* Fait une requête HTTP au serveur du Raspberry PI de la voiture pour l'affiche en direct du flux vidéo de la caméra embarquée
-		* Si pas de signal vidéo, affiche une image de secours
-	* Doublure de secours :
-		* API PHP génère des données aléatoires à chaque fois qu'il est appelé et les renvoie directement en JSON
-		* Par rapport au script Python, il attend qu'on lui demande des données et il ne stocke rien, les données sont volatiles
-	* Bonus : Gestion des résultats de la course avec une table dédiée dans la BDD et le même processus derrière (pas de gestion d'affichage dans la solution)
-	
-## Arborescence :
+		* Crée chaque seconde des données télémétriques aléatoires réalistes
+		* Envoie ces données via le réseau vers l'adresse IP de la VM Ubuntu en utilisant les identifiants d'un utilisateur privilégié (pour MySQL).
+	* Serveur MySQL de stockage (Ubuntu) :
+		* Le service MySQL reçoit la requête et enregistre les données dans la table "telemetrie" de la BDD principale
+		* Chaque mesure est stockée avec un identifiant unique, ce qui permet de conserver tout l'historique de la course
+	* Serveur WAMP héberge les scripts PHP qui servent d'intermédiaires
+	* API PHP de distribution (WAMP) : 
+		* Se connecte à la VM Ubuntu pour récupérer uniquement la dernière mesure insérée
+		* Renvoie cette mesure au format JSON pour qu'elle soit exploitable par le navigateur web
+	* Dashboard d'affichage (Navigateur) :
+		* Script JavaScript interroge l'API PHP toutes les secondes
+		* Met à jour les indicateurs textuels et dessine la courbe de vitesse en temps réel avec Chart.js
+		* Si la vitesse est nulle, le script active une alerte visuelle clignotante rouge définie dans la feuille de style principale
+		* Accède et affiche le flux vidéo réel en direct de la caméra embarquée de la voiture via une requête HTTP vers le serveur Raspberry PI de la voiture (pas encore accessible, voir ligne suivante)
+		* Affiche une image de secours en cas d'absence de signal vidéo
+	* Bonus : Système de gestion des résultats de la course (données de résultat stockées dans une table dédiée de la BDD et appelées par une API, mais pas encore de gestion d'affichage)
+
+## Organisation & Arborescence :
+	* Emplacement du code pour exécution avec WAMP : "C:\wamp64\www"
 	* Script Python : collecte_telemetrie.py
-	* BDD : covaciel_gestion
-	* API PHP principale : api/api_data.php
-	* Dashboard web : index.php
+	* VM Ubuntu : serveur-ubuntu-projet 172.17.50.233
+	* User privilégié de gestion initiale : manz
+	* User privilégié de gestion des données (script Python) : candidat4 (mdp : "Azerty123#")
+	* BDD principale : covaciel_gestion
+	* API PHP de distribution : api/api_data.php
 	* Script JavaScript : assets/script.js
-	* CSS principal : assets/style.css
-	* Flux vidéo du serveur Raspberry : http://192.168.1.50:8080/stream.mjpg
-	* Image de secours : img/no-signal.jpg
-	* API PHP doublure de secours : api/simulateur_voiture.php
-	* Table BDD de gestion des résultats : resultat
+	* Dashboard d'affichage : index.php
+	* Feuille de Style principale : assets/style.css
+	* Serveur Raspberry PI voiture : http://192.168.1.50 (à éventuellement adapter au déploiement)
+	* Flux vidéo : http://192.168.1.50:8080/stream.mjpg (à éventuellement adapter au déploiement)
+	* Image de secours : img/no-signal.jpg 
+	* Table de gestion des résultats : resultat
 	* API PHP de gestion des résultats : api/get_ranking.php
 	
 ## Protocole de test à suivre :
 	* Démarrer Wampserver64 (vérifier son fonctionnement avec l'affichage du logo en vert dans le barre des tâches)
-	* Ouvrir une console PowerShell dans le répertoire et exécuter le script Python : python collecte_telemetrie.py (vérifier le fonctionnement avec l'affichage du message du succès du renvoi des données vers la BDD)
-	* Ouvrir un navigateur et taper : localhost/covaciel_sln_finale
+	* Ouvrir une cmd ou autre terminal et se connecter à la VM Ubuntu en SSH avec user privilégié de gestion initiale : ssh manz@172.17.50.233 (vérifier le fonctionnement avec la présence du message de bienvenue)
+	* Démarrer le serveur MySQL : sudo systemctl start mysql (vérifer le fonctionnement avec l'absence de message d'erreur)
+	* Ouvrir une console PowerShell dans l'emplacement du code et exécuter le script Python : python collecte_telemetrie.py (vérifier le fonctionnement avec l'affichage du message du succès du renvoi des données vers la BDD)
+	* Ouvrir un navigateur et taper : localhost/covaciel_simulation_sln_finale
 	* Constater le fonctionnement avec l'affichage de chaque valeur télémétrique et leur mise à jour chaque seconde (idem pour la courbe chart), et l'affichage du flux vidéo et de l'image de secours en cas d'absence du signal
-	* Avec doublure de secours, modifier dans script.js la ligne _const URL_LOCALE = 'api/api_data.php';_ par _const URL_LOCALE = 'simulateur_voiture.php';_ avant de commencer les tests
 	
 ## Suggestion d'évolutibilité :
-	* Utiliser un serveur Ubuntu sur une VM pour la BDD et le service MySQL pour exécution de la solution à distance depuis n'importe quel poste tant qu'il possède les privilèges admin ainsi que les codes sources
+	* Stockage de tous les fichiers sources dans le serveur Ubuntu pour exécution à distance via n'importe quel poste

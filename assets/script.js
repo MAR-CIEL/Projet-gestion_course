@@ -1,5 +1,6 @@
-// Vérifie que le DOM est chargé avant de lancer le graphique
 document.addEventListener("DOMContentLoaded", function() {
+    const URL_LOCALE = 'api/api_data.php'; 
+
     const ctx = document.getElementById('chart-speed').getContext('2d');
     const speedChart = new Chart(ctx, {
         type: 'line',
@@ -9,33 +10,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 label: 'Vitesse (km/h)',
                 data: [],
                 borderColor: '#007bff',
-                backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                fill: true,
-                tension: 0.3
+                tension: 0.3,
+                fill: true
             }]
         },
-        options: { 
-            responsive: true, 
-            animation: false,
-            scales: { y: { beginAtZero: true, max: 60 } } 
-        }
+        options: { responsive: true, animation: false }
     });
-
-    const URL_LOCALE = 'api/api_data.php'; 
 
     async function updateDashboard() {
         try {
-            // Ajout d'un paramètre anti-cache (?t=...) pour forcer la mise à jour
+            // Lecture de la VM via l'API PHP
             let response = await fetch(URL_LOCALE + '?t=' + Date.now()); 
-            if (!response.ok) throw new Error("Erreur réseau");
-            
             const data = await response.json();
             
             if (data && !data.error) {
                 renderData(data, speedChart);
             }
         } catch (error) {
-            console.error("Erreur de lecture API :", error);
+            console.error("Erreur API :", error);
         }
     }
 
@@ -44,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('txt-vitesse').innerText = data.vitesse + " km/h";
         document.getElementById('txt-batterie').innerText = data.tension_batterie + " V";
         document.getElementById('txt-conso').innerText = data.consommation + " A";
-        document.getElementById('txt-obstacle').innerText = (parseInt(data.obstacle) === 1) ? "DÉTECTÉ" : "Néant";
+        document.getElementById('txt-obstacle').innerText = (data.obstacle === 1) ? "DÉTECTÉ" : "Néant";
 
         // Alerte clignotante Art. 6
         const vElem = document.getElementById('txt-vitesse');
@@ -54,19 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
             vElem.classList.remove('critical-alert');
         }
 
-        // Badge de sens
-        const sensBadge = document.getElementById('badge-sens');
-        sensBadge.innerText = (data.sens === "AV") ? "MARCHE AVANT" : "MARCHE ARRIÈRE";
-        sensBadge.className = (data.sens === "AV") ? "badge bg-success" : "badge bg-warning text-dark";
-
-        // Énergie
-        let p = Math.max(0, Math.min(100, ((parseFloat(data.tension_batterie) - 6) / 1.2) * 100));
-        const bar = document.getElementById('barre-energie');
-        bar.style.width = p + "%";
-        bar.innerText = Math.round(p) + "%";
-        bar.className = (p < 20) ? "progress-bar bg-danger" : "progress-bar bg-success";
-
-        // Graphique
+        // Mise à jour du graphique
         const now = new Date().toLocaleTimeString();
         chart.data.labels.push(now);
         chart.data.datasets[0].data.push(data.vitesse);
@@ -77,6 +57,5 @@ document.addEventListener("DOMContentLoaded", function() {
         chart.update('none');
     }
 
-    // Lancement du cycle
     setInterval(updateDashboard, 1000);
 });

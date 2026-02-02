@@ -1,10 +1,13 @@
 <?php
 header('Content-Type: application/json');
-$conn = new mysqli("localhost", "root", "", "covaciel_gestion");
+// Connexion à la VM Ubuntu depuis WAMP
+$conn = new mysqli("172.17.50.238", "candidat4", "Azerty123#", "covaciel_gestion");
 
-if ($conn->connect_error) die(json_encode(["error" => "BDD Down"]));
+if ($conn->connect_error) {
+    die(json_encode(["error" => "Connexion VM Ubuntu impossible"]));
+}
 
-// Tri par ID_MESURE pour éviter les conflits d'horodatage
+// Récupération de la dernière mesure triée par ID
 $sql = "SELECT vitesse, tension_batterie, consommation, obstacle, sens 
         FROM telemetrie 
         ORDER BY id_mesure DESC LIMIT 1"; 

@@ -1,15 +1,45 @@
-body { background-color: #f4f7f6; font-family: sans-serif; }
-.card { border-radius: 12px; transition: transform 0.2s; }
+/* Style général */
+body { 
+    background-color: #f4f7f6; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+}
 
-/* Animation pour l'arrêt du véhicule */
+.card { 
+    border-radius: 12px; 
+    border: none;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    font-weight: bold;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+/* Animation pour l'arrêt du véhicule (Règlement Art. 6) */
 .critical-alert {
-    color: #e74c3c !important;
+    color: #e74c3c !important; /* Rouge vif */
     font-weight: bold;
     animation: blinker 1s linear infinite;
 }
 
-@keyframes blinker { 50% { opacity: 0; } }
+@keyframes blinker { 
+    50% { opacity: 0; } 
+}
 
-#video-feed { background-color: #000; min-height: 300px; width: 100%; }
+/* Conteneur vidéo */
+#video-feed { 
+    background-color: #000; 
+    min-height: 300px; 
+    width: 100%; 
+    border-radius: 12px;
+    display: block;
+	border: 3px solid black;
+}
 
-#txt-obstacle { font-size: 28px; margin-top: 10px; }
+/* Style pour la barre de progression d'énergie */
+.progress {
+    height: 25px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
