@@ -1,44 +1,38 @@
+import requests
 import mysql.connector
 import time
-import random 
 
-# Configuration de la VM Ubuntu distante
+# Configuration de la voiture et de la base de données distante
+URL_VOITURE = "http://192.168.1.50/api/telemetrie" # à adapter en fonction du choix du groupe collaboratif
 DB_CONFIG = {
-    'host': '172.17.50.238', 
+    'host': '172.17.50.238',  # IP de ta VM Ubuntu
     'user': 'candidat4', 
     'password': 'Azerty123#', 
     'database': 'covaciel_gestion'
-}
+} #
 
-def simulation_collecte():
-    print("Simulateur actif : Envoi des données vers la VM Ubuntu (172.17.50.238)...")
+def archive_data():
+    print("Démarrage de la collecte Wi-Fi vers VM Ubuntu (172.17.50.238)...")
     while True:
         try:
-            # Génération de données aléatoires réalistes
-            data = {
-                "vitesse": random.randint(0, 45),
-                "tension_batterie": round(random.uniform(6.0, 7.2), 2),
-                "consommation": round(random.uniform(0.5, 3.5), 2),
-                "obstacle": random.choice([0, 1]),
-                "sens": random.choice(["AV", "AR"])
-            }
+            # Récupération des données en JSON
+            response = requests.get(URL_VOITURE, timeout=1) #
+            if response.status_code == 200:
+                data = response.json() #
 
-            # Connexion à la base de données sur la VM Linux
-            conn = mysql.connector.connect(**DB_CONFIG)
-            cursor = conn.cursor()
+                # Connexion et insertion dans la VM Ubuntu
+                conn = mysql.connector.connect(**DB_CONFIG)
+                cursor = conn.cursor()
+                sql = "INSERT INTO telemetrie (id_voiture, vitesse, tension_batterie, consommation, obstacle, sens) VALUES (1, %s, %s, %s, %s, %s)" #
+                cursor.execute(sql, (data['vitesse'], data['tension_batterie'], data['consommation'], data['obstacle'], data['sens'])) #
+                conn.commit()
+                conn.close()
+                print(f"Donnée archivée sur VM : {data['vitesse']} km/h") #
             
-            sql = "INSERT INTO telemetrie (id_voiture, vitesse, tension_batterie, consommation, obstacle, sens) VALUES (1, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, (data['vitesse'], data['tension_batterie'], data['consommation'], data['obstacle'], data['sens']))
-            
-            conn.commit()
-            conn.close()
-            
-            print(f"✅ Donnée envoyée à la VM : {data['vitesse']} km/h | {data['tension_batterie']} V")
-
         except Exception as e:
-            print(f"❌ Erreur de connexion à la VM Ubuntu : {e}")
-        
-        time.sleep(1) # Fréquence de 1Hz
+            print(f"Erreur de communication : {e}") #
+            
+        time.sleep(1) #
 
 if __name__ == "__main__":
-    simulation_collecte()
+    archive_data() #
