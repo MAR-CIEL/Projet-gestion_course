@@ -1,13 +1,60 @@
-/* */
-body { background-color: #f4f7f6; font-family: sans-serif; }
-.card { border-radius: 12px; }
+/* Style général */
+body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 
-/* Animation pour l'arrêt (Règlement Art. 6) */
+.card { border-radius: 12px; border: none; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.card-header { font-weight: bold; border-top-left-radius: 12px !important; border-top-right-radius: 12px !important; }
+
+/* --- Container flexible pour les indicateurs (Mis à jour pour 6 éléments) --- */
+.telemetry-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permet le passage à la ligne si besoin sur très petit écran */
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.fixed-column {
+    min-width: 90px; /* Largeur fixe pour stabiliser l'affichage */
+    text-align: center;
+    flex: 1 1 20%; /* Permet aux éléments de se répartir sur plusieurs lignes si nécessaire */
+}
+
+h2 {
+    font-size: clamp(1rem, 2vw, 1.4rem) !important; /* Taille légèrement ajustée pour accueillir 6 éléments */
+    white-space: nowrap !important;
+    margin-top: 5px;
+}
+
+/* --- Animation Alerte Art. 6 --- */
 .critical-alert {
     color: #e74c3c !important;
     font-weight: bold;
     animation: blinker 1s linear infinite;
 }
+@keyframes blinker { 50% { opacity: 0.3; } }
 
-@keyframes blinker { 50% { opacity: 0; } }
-#video-feed { min-height: 300px; width: 100%; }
+/* --- Vidéo et Éléments UI --- */
+#video-feed { 
+    width: 100%; 
+    min-height: 350px; 
+    border-radius: 12px;
+    display: block; 
+    background-color: #000; 
+}
+
+.progress { height: 25px; background-color: #e9ecef; border-radius: 5px; margin-top: 10px; }
+.progress-bar { transition: width 0.5s ease-in-out; font-weight: bold; line-height: 25px; }
+
+.badge { padding: 0.5rem 1rem; border-radius: 6px; }
+
+#chart-speed { background-color: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+h1 {
+	text-align: center;
+	font-size: 30px;
+	background: #004A87;
+	color: white;
+	padding: 15px;
+	border-radius: 12px;
+}

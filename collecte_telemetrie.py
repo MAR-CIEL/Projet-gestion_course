@@ -1,38 +1,43 @@
-import requests
 import mysql.connector
+import requests
 import time
+import random
 
-# Configuration de la voiture et de la base de données distante
-URL_VOITURE = "http://192.168.1.50/api/telemetrie" # à adapter en fonction du choix du groupe collaboratif
+# CONFIGURATION VM UBUNTU (Destination)
 DB_CONFIG = {
-    'host': '172.17.50.238',  # IP de ta VM Ubuntu
+    'host': '172.17.50.233', 
     'user': 'candidat4', 
     'password': 'Azerty123#', 
     'database': 'covaciel_gestion'
-} #
+}
 
-def archive_data():
-    print("Démarrage de la collecte Wi-Fi vers VM Ubuntu (172.17.50.238)...")
+# IP de l'API du serveur Raspberry Pi Voiture
+URL_API = "http://172.17.50.239/api_data.php" 
+
+# Fonction de gestion des données télémétriques
+def collecter_reelle():
+    print("Connexion API Serveur Voiture : Récupération données...")
     while True:
         try:
-            # Récupération des données en JSON
-            response = requests.get(URL_VOITURE, timeout=1) #
-            if response.status_code == 200:
-                data = response.json() #
-
-                # Connexion et insertion dans la VM Ubuntu
+            r = requests.get(URL_API, timeout=2)
+            if r.status_code == 200:
+                data = r.json() 
+                
+                # Simulation obstacle locale (en attente du serveur voiture)
+                obstacle_sim = random.choice([0, 1]) 
+                
                 conn = mysql.connector.connect(**DB_CONFIG)
                 cursor = conn.cursor()
-                sql = "INSERT INTO telemetrie (id_voiture, vitesse, tension_batterie, consommation, obstacle, sens) VALUES (1, %s, %s, %s, %s, %s)" #
-                cursor.execute(sql, (data['vitesse'], data['tension_batterie'], data['consommation'], data['obstacle'], data['sens'])) #
+                # Insertion des données réelles
+                sql = "INSERT INTO telemetrie (id_voiture, vitesse, tension_batterie, consommation, obstacle, direction, acceleration, distance_parcourue) VALUES (1, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.execute(sql, (data['vitesse_kmh'], data['batterie_tension'], data['batterie_courant'], obstacle_sim, data['direction'], data['acceleration'], data['distance_parcourue']))
                 conn.commit()
                 conn.close()
-                print(f"Donnée archivée sur VM : {data['vitesse']} km/h") #
+                print(f"✅ Donnée insérée : {data['vitesse_kmh']} km/h | Accel: {data['acceleration']} | Dist: {data['distance_parcourue']}")
             
         except Exception as e:
-            print(f"Erreur de communication : {e}") #
-            
-        time.sleep(1) #
+            print(f"❌ Erreur connexion API : {e}")
+        time.sleep(1) # Fréquence 1Hz
 
 if __name__ == "__main__":
-    archive_data() #
+    collecter_reelle()
