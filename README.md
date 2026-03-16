@@ -1,5 +1,5 @@
 # COVACIEL 2026 Solution Finale Télémétrie & UX
-### Le processus de cette solution est le même pour chaque voiture, cette solution n'est développée que pour l'une des voitures pour le moment
+### Le processus de cette solution est le même pour chaque voiture, avec adaptation uniquement des requêtes HTTP Raspberry PI en fonction de la voiture (API de données + vidéo)
 ## Résumé Général du Processus :
 * Serveur données passif Raspberry PI de la voiture stoque les données télémétriques converties des capteurs physiques de la voiture
 * Script Python demande chaque seconde ces données via une requête HTTP directe vers l'API concernée du serveur
@@ -13,8 +13,8 @@
 	
 ## Organisation & Arborescence :
 * Emplacement du code pour exécution avec WAMP : "C:\wamp64\www"
-* Serveur données Raspberry : http://172.17.50.239 (à éventuellement adapter)
-* API de données télémétriques du serveur : http://172.17.50.239/api_data.php (à éventuellement adapter)
+* Serveur données Raspberry : http://172.17.50.236 (adapter au Raspberry)
+* API de données télémétriques du serveur : http://172.17.50.236/api_data.php (adapter au Raspberry)
 * Script Python : collecte_telemetrie.py
 * Serveur Ubuntu : serveur-ubuntu-projet 172.17.50.233
 * User privilégié de gestion initiale : manz
@@ -24,7 +24,7 @@
 * Script Js : assets/script.js
 * Dashboard PHP/HTML : index.php
 * Feuille de Style principale : assets/style.css
-* Flux vidéo : http://172.17.50.239:8000/video_feed (à éventuellement adapter)
+* Flux vidéo : http://172.17.50.236:8889/cam (adapter au Raspberry)
 * Image de secours : img/no-signal.jpg
 * Table de gestion des résultats : resultat
 * API PHP de gestion des résultats : api/get_ranking.php
@@ -32,7 +32,7 @@
 ## Protocole de test à suivre :
 * Attendre que le candidat/technicien 1 démarre la VM (et le service mysql éventuellement, sinon suivre les 2 prochaines lignes)
 * Démarrer Wampserver64 (vérifier son fonctionnement avec l'affichage du logo en vert dans le barre des tâches)
-* Ouvrir une cmd ou autre terminal et se connecter à la VM Ubuntu en SSH avec user privilégié de gestion initiale : ssh manz@172.17.50.233(vérifier le fonctionnement avec la présence du message de bienvenue)
+* Ouvrir une cmd ou autre terminal et se connecter à la VM Ubuntu en SSH avec user privilégié de gestion initiale : ssh manz@172.17.50.233(vérifier le fonctionnement avec la présence du message de bienvenue - à éventuellement adapter au déploiement)
 * Démarrer le serveur MySQL : sudo systemctl start mysql (vérifer le fonctionnement avec l'absence de message d'erreur)
 * Ouvrir une console PowerShell dans le répertoire et exécuter le script Python : python collecte_telemetrie.py (vérifier le fonctionnement avec l'affichage du message du succès du renvoi des données vers la BDD)
 * Ouvrir le dashboard dans un navigateur : localhost/covaciel_t4_sources/solution_finale

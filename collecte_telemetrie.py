@@ -12,7 +12,7 @@ DB_CONFIG = {
 }
 
 # IP de l'API du serveur Raspberry Pi Voiture
-URL_API = "http://172.17.50.239/api_data.php" 
+URL_API = "http://172.17.50.236/api_data.php" 
 
 # Fonction de gestion des données télémétriques
 def collecter_reelle():
