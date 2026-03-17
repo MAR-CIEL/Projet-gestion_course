@@ -1,0 +1,279 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    background-color: #FBFDFF;
+    font-family: sans-serif;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 10px;
+    gap: 15px;
+    box-sizing: border-box;
+}
+
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+
+/* Animation pour l'arrêt du véhicule */
+.critical-alert {
+    color: #e74c3c !important;
+    font-weight: bold;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+.card-body-p-0-bg-black {
+    flex-grow: 1;
+    display: flex;
+    background-color: #000;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    height: 100%;
+    position: relative; /* Sécurité pour le positionnement */
+}
+
+#video-feed-1 {
+    width: 100% !important;
+    height: 100% !important;
+    border: none;
+    display: block;
+    object-fit: contain;
+}
+
+#video-feed-2 {
+    background-color: #000;
+    object-fit: contain;
+    max-width: 100%;
+}
+
+#txt-obstacle {
+    font-size: 28px;
+    margin-top: 10px;
+}
+
+.barre-entete, .card-header {
+    background-color: #3358D4;
+    color: white;
+    padding: 5px 20px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.camera{
+    display: flex;
+    flex: 0.72;
+    min-height: 0;
+    margin: 0;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+#camera-1, #camera-2 {
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: solid 2px #3A4F97;
+    width: stretch;
+}
+
+.donnees-voitures, .donnees-course{
+    background-color: #113264;
+    color: white;
+    width: 100%;
+    margin: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: solid 2px #3A4F97;
+}
+
+.donnees-voitures > *:not(.card-header), 
+.donnees-course > *:not(.card-header) {
+    padding: 10px 15px 0 15px;
+}
+
+.bas-page{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 15px;
+    flex: 1;
+    min-height: 220px;
+    max-height: 220px;
+}
+
+.donnees-voitures > h3{
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.bloc-voiture-haut{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.bloc-voiture-haut h4, .bloc-course-haut h4{
+    font-size: 1rem;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.bloc-voiture-haut h2, .bloc-course-haut h2{
+    font-size: 1.7rem;
+    margin-top: 0;
+    text-align: center;
+}
+
+.bloc-course-haut h3{
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.temps-tours{
+    display: flex;
+    justify-content: space-around;
+}
+
+.boutons{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    bottom: 10px;
+}
+
+.bouton-precedent, .bouton-suivant{
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.bouton-precedent{
+    clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+    width: 50px;
+}
+
+.bouton-suivant{
+    clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+    height: 50px;
+}
+
+.donnees-course{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.bloc-course-haut{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    line-height: 1.5;
+}
+
+.chrono{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+/* --- ANIMATION DE TRANSITION --- */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* La classe d'animation */
+.slide-in-right {
+    animation: slideInRight 0.5s ease-out forwards !important;
+}
+
+/* --- REGLAGE DES ELEMENTS --- */
+
+/* On centre le titre pour qu'il ne glisse pas bizarrement */
+.titre-voiture {
+    text-align: center;
+    width: 100%;
+}
+
+/* LA FIX POUR LA BARRE D'ENERGIE : 
+   On retire les width:auto et inline-block qui cassaient tout */
+.energie .progress {
+    width: 100% !important; 
+    max-width: 250px;
+    height: 15px;
+    background-color: rgba(255,255,255,0.1); /* Fond de jauge visible */
+    display: flex !important; 
+    margin-top: 5px;
+}
+
+/* On s'assure que les blocs vitesse/energie ne s'écrasent pas */
+.vitesse, .energie {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 150px;
+}
+
+/* ALIGNEMENT DES TOURS */
+.temps-tours {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.numero-tours, .donnees-tours {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    gap: 20px;
+    font-size: 0.9rem;
+}
+
+.donnees-tours span {
+    width: 25%;
+    text-align: center;
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+
+.classement p{
+    line-height: 1.5;
+    font-size: 0.9rem;
+    font-family: monospace;
+    background: rgba(0,0,0,0.3);
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 3px solid #3358D4;
+}

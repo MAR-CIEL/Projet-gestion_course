@@ -1,0 +1,9 @@
+﻿.vs/
+*.ipch
+*.pdb
+*.exe
+*.obj
+*.vsidx
+bin/
+obj/
+doc/html/
