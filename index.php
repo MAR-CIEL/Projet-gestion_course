@@ -51,7 +51,7 @@
             </div>
             <div class="col-md-6">
 				<h1>Vidéo Caméra Embarquée</h1>
-                <div class="card shadow-sm bg-black"><iframe id="video-feed" src="http://172.17.50.236:8889/cam" onerror="this.src='img/no-signal.jpg';"></div>
+                <div class="card shadow-sm bg-black"><iframe id="video-feed" src="http://172.17.50.94:8889/cam" onerror="this.src='img/no-signal.jpg';"></div>
 			</div>
         </div>
     </div>
