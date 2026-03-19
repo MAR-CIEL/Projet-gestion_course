@@ -13,8 +13,8 @@
 	
 ## Organisation & Arborescence :
 * Emplacement du code pour exécution avec WAMP : "C:\wamp64\www"
-* Serveur données Raspberry : http://172.17.50.236 (adapter au Raspberry)
-* API de données télémétriques du serveur : http://172.17.50.236/api_data.php (adapter au Raspberry)
+* Serveur données Raspberry : http://172.17.50.94 (adapter au Raspberry)
+* API de données télémétriques du serveur : http://172.17.50.94/api_data.php (adapter au Raspberry)
 * Script Python : collecte_telemetrie.py
 * Serveur Ubuntu : serveur-ubuntu-projet 172.17.50.233
 * User privilégié de gestion initiale : manz
@@ -24,7 +24,7 @@
 * Script Js : assets/script.js
 * Dashboard PHP/HTML : index.php
 * Feuille de Style principale : assets/style.css
-* Flux vidéo : http://172.17.50.236:8889/cam (adapter au Raspberry)
+* Flux vidéo : http://172.17.50.94:8889/cam (adapter au Raspberry)
 * Image de secours : img/no-signal.jpg
 * Table de gestion des résultats : resultat
 * API PHP de gestion des résultats : api/get_ranking.php
@@ -35,7 +35,7 @@
 * Ouvrir une cmd ou autre terminal et se connecter à la VM Ubuntu en SSH avec user privilégié de gestion initiale : ssh manz@172.17.50.233(vérifier le fonctionnement avec la présence du message de bienvenue - à éventuellement adapter au déploiement)
 * Démarrer le serveur MySQL : sudo systemctl start mysql (vérifer le fonctionnement avec l'absence de message d'erreur)
 * Ouvrir une console PowerShell dans le répertoire et exécuter le script Python : python collecte_telemetrie.py (vérifier le fonctionnement avec l'affichage du message du succès du renvoi des données vers la BDD)
-* Ouvrir le dashboard dans un navigateur : localhost/covaciel_t4_sources/solution_finale
+* Ouvrir le dashboard dans un navigateur : localhost/covaciel_t4_sources/solution_finale_voiture_hugo (adapter à la solution à exécuter)
 * Constater le fonctionnement avec l'affichage de chaque valeur et indicateur dynamique télémétrique et leur mise à jour chaque seconde (idem pour la courbe chart), et l'affichage du flux vidéo et de l'image de secours en cas d'absence du signal
 
 ## Suggestion d'évolutibilité :
