@@ -26,7 +26,6 @@ main {
 /* Animation pour l'arrêt du véhicule */
 .critical-alert {
     color: #e74c3c !important;
-    font-weight: bold;
     animation: blinker 1s linear infinite;
 }
 
@@ -123,6 +122,8 @@ main {
     text-align: center;
     font-size: 1.2rem;
     margin-bottom: 5px;
+    font-weight: 300;
+    margin-bottom: -20px;
 }
 
 .bloc-voiture-haut{
@@ -138,17 +139,20 @@ main {
     font-size: 1rem;
     margin-bottom: 0;
     text-align: center;
+    font-weight: 300;
 }
 
 .bloc-voiture-haut h2, .bloc-course-haut h2{
     font-size: 1.7rem;
     margin-top: 0;
     text-align: center;
+    font-weight: 300;
 }
 
 .bloc-course-haut h3{
     font-size: 1.4rem;
     text-align: center;
+    font-weight: 300;
 }
 
 .temps-tours{
