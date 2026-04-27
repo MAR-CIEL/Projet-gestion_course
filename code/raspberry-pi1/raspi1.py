@@ -3,55 +3,74 @@ from sense_hat import SenseHat
 from time import sleep
 
 
-IP_du_docker = "172.17.50.149" 
+class SenseAnimation:
+    def __init__(self):
+        self.sense = SenseHat()
+        self.sense.clear()
+        self.red = (255, 0, 0)
+        self.yellow = (255, 255, 0)
+        self.green = (0, 255, 0)
 
 
-sense = SenseHat()
-sense.clear()
-
-
-R = (255, 0, 0)
-G = (0, 255, 0)
-
-
-def animation_start():
-    i = 0
-    while i < 3 :
-        sense.clear(R)
-        sleep(1)
-        sense.clear()
-        sleep(0.4)
-        i = i+1
-    
-    sense.clear(G)
-    sleep(5)
-    sense.clear()
-
-def on_message(client, userdata, message):
-    topic = message.topic
-    payload = str(message.payload.decode("utf-8"))
-    
-    print(f"Ordre reçu sur {topic} : {payload}")
-
-    if topic == "covaciel/START":
+    def start_animation(self):
         print("Lancement de l'animation de départ...")
-        animation_start()
-        
-    elif topic == "covaciel/STOP":
-        print("Arrêt : Extinction du Sense HAT")
-        sense.clear(R) 
+        for _ in range(5):
+            self.sense.clear(self.red)
+            sleep(1)
+            self.sense.clear()
+            sleep(0.2)
+        self.sense.clear(self.green)
         sleep(5)
-        sense.clear()
+        self.sense.clear()
+
+    def stop_animation(self):
+        print("Arrêt : Extinction du Sense HAT")
+        self.sense.clear(self.red)
+        sleep(5)
+        self.sense.clear()
 
 
-client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, "Raspberry_Piste_Sense")
-client.on_message = on_message
+class MqttController:
+    def __init__(self, broker_ip, topic, display):
+        self.broker_ip = broker_ip
+        self.topic = topic
+        self.display = display 
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, "Raspberry_Piste_Sense")
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
 
-try:
-    print(f"Connexion au Broker {IP_du_docker}...")
-    client.connect(IP_du_docker, 1883)
-    client.subscribe("covaciel/#")
-    print("Prêt à recevoir les ordres de l'IHM.")
-    client.loop_forever()
-except Exception as e:
-    print(f"Erreur : {e}")
+    def on_connect(self, client, userdata, flags, rc):
+        if rc == 0:
+            print(f"Connecté au Broker {self.broker_ip} !")
+            self.client.subscribe(self.topic)
+        else:
+            print(f"Échec de connexion, code : {rc}")
+
+    def on_message(self, client, userdata, message):
+        topic = message.topic
+        payload = message.payload.decode("utf-8")
+        print(f"Ordre reçu sur {topic} : {payload}")
+
+        if topic == "covaciel/START":
+            self.display.start_animation()
+        elif topic == "covaciel/STOP":
+            self.display.stop_animation()
+
+    def run(self):
+        try:
+            print(f"Connexion au Broker {self.broker_ip}...")
+            self.client.connect(self.broker_ip, 1883)
+            print("Prêt à recevoir les ordres de l'IHM.")
+            self.client.loop_forever()
+        except Exception as e:
+            print(f"Erreur de connexion : {e}")
+
+
+if __name__ == "__main__":
+    BROKER_ADDR = "172.17.50.149"
+    TOPIC_FILTER = "covaciel/#"
+
+    mon_affichage = SenseAnimation()
+    mon_controleur = MqttController(BROKER_ADDR, TOPIC_FILTER, mon_affichage)
+    mon_controleur.run()
+
