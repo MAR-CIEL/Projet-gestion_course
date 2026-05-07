@@ -1,19 +1,22 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const ctx = document.getElementById('chart-speed').getContext('2d');
+    // Initialisation de la courbe de vitesse
+	const ctx = document.getElementById('chart-speed').getContext('2d'); // Réglage du "dessin"
     const speedChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels: [], datasets: [{ label: 'Vitesse (km/h)', data: [], borderColor: '#007bff', tension: 0.3 }] },
-        options: { responsive: true, animation: false, scales: { y: { beginAtZero: true, max: 20 } } }
+        type: 'line', // Ligne continue
+        data: { labels: [], datasets: [{ label: 'Vitesse (km/h)', data: [], borderColor: '#007bff', tension: 0.3 }] }, // Valeurs à afficher
+        options: { responsive: true, animation: false, scales: { y: { beginAtZero: true, max: 20 } } } // Maximum de données sur le graphique
     });
-
+	
+	// Fonction de mise à jour des valeurs sur le dashboard
     async function updateDashboard() {
         try {
-            let response = await fetch('api/api_data.php?t=' + Date.now());
+            let response = await fetch('api/api_data.php?t=' + Date.now()); // Connexion à l'API (qui récupère la dernière ligne des données insérées dans la BDD)
             const data = await response.json();
             if (data && !data.error) renderData(data, speedChart);
         } catch (e) { console.error("Erreur API", e); }
     }
-
+	
+	// Valeurs à afficher
     function renderData(data, chart) {
         document.getElementById('txt-vitesse').innerText = data.vitesse + " km/h";
         document.getElementById('txt-batterie').innerText = data.tension_batterie + " V";
@@ -23,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById('txt-accel').innerText = data.acceleration;
 		document.getElementById('txt-distance').innerText = data.distance + " m";
 
-        // Logique sens direction
+        // Logique sens en fonction de l'angle de direction
         const sensBadge = document.getElementById('badge-sens');
         if (Math.abs(data.direction) > 90) {
             sensBadge.innerText = "MARCHE ARRIÈRE";
@@ -33,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
             sensBadge.className = "badge bg-success fs-5";
         }
 
-        // Énergie
+        // Pourcentage d'énergie
 		const tension = parseFloat(data.tension_batterie);
 		let pct = Math.round(((tension - 6.0) / 1.2) * 100);
 		
@@ -42,10 +45,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		const prog = document.getElementById('prog-energie');
 		
-		// Mise à jour de la largeur visuelle (la barre bouge)
+		// Mise à jour de la barre d'énergie
 		prog.style.width = pct + "%";
 		
-		// Mise à jour du texte (le chiffre change)
+		// Mise à jour du texte
 		prog.innerText = pct + "%"; 
 		
 		// Mise à jour de la couleur
@@ -58,5 +61,5 @@ document.addEventListener("DOMContentLoaded", function() {
         if (chart.data.labels.length > 15) { chart.data.labels.shift(); chart.data.datasets[0].data.shift(); }
         chart.update('none');
     }
-    setInterval(updateDashboard, 1000);
+    setInterval(updateDashboard, 1000); // Mise à jour chaque seconde
 });

@@ -1,43 +1,34 @@
-# COVACIEL 2026 Solution Finale Télémétrie & UX
-### Le processus de cette solution est le même pour chaque voiture, avec adaptation uniquement des requêtes HTTP Raspberry PI en fonction de la voiture (API de données + vidéo)
+# COVACIEL 2026 - Solution Finale - Télémétrie & Vidéo
+
+### Solution finale du dashboard de test télémétrie et vidéo multi-véhicule (s’adapte à la voiture testée grâce à son id). Accès aux données télémétriques converties des capteurs physiques de la voiture, ainsi qu’au flux vidéo de sa caméra embarquée via une connexion Wi-Fi au point d’accès de son Raspberry Pi intégré, qui stocke tout. Dashboard dédié au tests unitaires, et fonctionnels, avant intégration dans le dashboard final du projet, accompagné du chronométrage/tracking, et d’une configuration Wi-Fi adaptée à l’affichage multi-véhicule, lancé au démarrage de la course.
+
 ## Résumé Général du Processus :
-* Serveur données passif Raspberry PI de la voiture stoque les données télémétriques converties des capteurs physiques de la voiture
-* Script Python demande chaque seconde ces données via une requête HTTP directe vers l'API concernée du serveur
-* Serveur répond avec un message JSON contenant toutes ces données et leur valeur
-* Script Python renvoie ces données dans la BDD principale dans la VM Ubuntu du projet qui les stoque et les historise à son tour (avec serveur MySQL)
-* BDD renvoie la dernière ligne de chaque donnée vers API PHP qui les demande constamment 
-* API transforme ensuite en JSON à nouveau
-* Script Js appelle l'API à la même fréquence que le Python et l'affiche sur le Dashboard PHP/HTML
-* Dashboard fait une requête HTTP vers le serveur du Raspberry PI pour l'accès et l'affichage du flux vidéo en direct de la caméra embarquée de la voiture, et affiche une image de secours en cas d'absence du signal
-* Bonus : Système de gestion des résultats de la course (données de résultat stockées dans une table dédiée dans la BDD principale et appelées par une API mais pas encore de gestion d'affichage)
+* Script Python récupère chaque seconde les données télémétriques et leur valeur via une requête HTTP/JSON vers l’API PHP externe du serveur du Raspberry Pi contenant ces données
+* Script Python renvoie ces données vers notre BDD dans notre VM (serveur Ubuntu avec MySQL) qui les stocke et les historise (avec un horodatage pour les statistiques de course)
+* API PHP interne récupère ces données (en provenance de la BDD) et les renvoie vers le script Js
+* Script Js gère l’affichage web dynamique des données (mise à jour en tant automatique chaque seconde en temps réel), ainsi que les éléments dynamiques dépendants de ces données (courbe de vitesse, jauges…)
+* Dashboard web sert de résultat visuel (UX) et affiche également le flux vidéo en tant réel de la caméra embarquée de la voiture via une requête HTTP vers le stockage du flux dans le serveur du Raspberry Pi (avec son port dédié)
 	
 ## Organisation & Arborescence :
-* Emplacement du code pour exécution avec WAMP : "C:\wamp64\www"
-* Serveur données Raspberry : http://172.17.50.94 (adapter au Raspberry)
-* API de données télémétriques du serveur : http://172.17.50.94/api_data.php (adapter au Raspberry)
+* Emplacement du code pour exécution avec WAMP : "C:\wamp64\www\covaciel_t4_sources\dashboard_finale_test_voiture_{nom du groupe}" 
 * Script Python : collecte_telemetrie.py
-* Serveur Ubuntu : serveur-ubuntu-projet 172.17.50.233
-* User privilégié de gestion initiale : manz
-* User privilégié de gestion des données (script python) : candidat4 (mdp : "Azerty123#")
-* BDD principale : covaciel_gestion
-* API PHP principale : api/api_data.php
+* VM (avec serveur Ubuntu) : serveur-ubuntu-projet 172.17.50.233
+* User privilégié (démarrage service MySQL avant exécution du code) : manz
+* API PHP interne : api/api_data.php
 * Script Js : assets/script.js
-* Dashboard PHP/HTML : index.php
-* Feuille de Style principale : assets/style.css
-* Flux vidéo : http://172.17.50.94:8889/cam (adapter au Raspberry)
-* Image de secours : img/no-signal.jpg
-* Table de gestion des résultats : resultat
-* API PHP de gestion des résultats : api/get_ranking.php
+* Dashboard web : index.php
+* Feuille de Style du dashboard : assets/style.css
+* Image de remplacement (absence de flux) : img/no-signal.jpg
 	
-## Protocole de test à suivre :
-* Attendre que le candidat/technicien 1 démarre la VM (et le service mysql éventuellement, sinon suivre les 2 prochaines lignes)
-* Démarrer Wampserver64 (vérifier son fonctionnement avec l'affichage du logo en vert dans le barre des tâches)
-* Ouvrir une cmd ou autre terminal et se connecter à la VM Ubuntu en SSH avec user privilégié de gestion initiale : ssh manz@172.17.50.233(vérifier le fonctionnement avec la présence du message de bienvenue - à éventuellement adapter au déploiement)
-* Démarrer le serveur MySQL : sudo systemctl start mysql (vérifer le fonctionnement avec l'absence de message d'erreur)
-* Ouvrir une console PowerShell dans le répertoire et exécuter le script Python : python collecte_telemetrie.py (vérifier le fonctionnement avec l'affichage du message du succès du renvoi des données vers la BDD)
-* Ouvrir le dashboard dans un navigateur : localhost/covaciel_t4_sources/solution_finale_voiture_hugo (adapter à la solution à exécuter)
-* Constater le fonctionnement avec l'affichage de chaque valeur et indicateur dynamique télémétrique et leur mise à jour chaque seconde (idem pour la courbe chart), et l'affichage du flux vidéo et de l'image de secours en cas d'absence du signal
+## Protocole d’exécution à suivre pour les tests unitaires (exécution réseau local - connexion directe au Raspberry Pi voiture par voiture) :
+* Attendre que le candidat/technicien 1 démarre la VM (+ service MySQL si possible)
+* Se connecter à la VM avec user privilégié via une invite de commande : ssh manz@172.17.50.233
+* Si T1 n’a pas démarré le service MySQL, le faire soi-même : sudo systemctl start mysql
+* Démarrer Wampserver64
+* Ouvrir PowerShell dans le répertoire et exécuter le script Python : python collecte_telemetrie.py (vérifier le fonctionnement avec l'affichage du message du succès du renvoi des données vers la BDD)
+* Ouvrir le dashboard web dans un navigateur : localhost/covaciel_t4_sources/dashboard_finale_test_voiture_{nom du groupe} (adapter à la voiture à tester)
+* Constater le fonctionnement avec l'affichage de chaque valeur et indicateur dynamique télémétrique et leur mise à jour chaque seconde, ainsi que l’affichage du flux vidéo et de l’image de secours en cas d’absence du signal.
 
-## Suggestion d'évolutibilité :
-* Stockage de tous les fichiers sources dans la VM Ubuntu pour exécution à distance via n'importe quel poste à condition que la gestion des droits soit également réalisée
-* Développer la solution pour les autres voitures
+## Intégration prochaine : 
+* Inclure cette solution dans un dashboard complet spectateur et écurie exécuté au lancement de la course (constitué de la télémétrie, vidéo, tracking et chronométrage en direct multi-véhicule)
+* Toutes les voitures (leur Raspberry Pi) sur un réseau Wi-Fi commun et connexion à ce réseau (à la place de chaque voiture indépendante), pour communication avec toutes les voitures simultanément

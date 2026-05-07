@@ -1,11 +1,12 @@
 <?php
 header('Content-Type: application/json');
-$conn = new mysqli("172.17.50.233", "candidat4", "Azerty123#", "covaciel_gestion");
+$conn = new mysqli("172.17.50.233", "candidat4", "Azerty123#", "covaciel_gestion"); // Connexion à la BDD
 
 if ($conn->connect_error) {
     die(json_encode(["error" => "Connexion VM Ubuntu impossible"]));
 }
 
+// Récupération des valeurs insérée
 $sql = "SELECT vitesse, tension_batterie, consommation, obstacle, direction, acceleration, distance_parcourue FROM telemetrie ORDER BY id_mesure DESC LIMIT 1"; 
 $result = $conn->query($sql);
 

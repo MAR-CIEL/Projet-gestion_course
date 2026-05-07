@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard T4 COVACIEL 2026</title>
+    <title>Dashboard T4 Test</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<link rel="stylesheet" href="assets/style.css">
@@ -10,7 +10,7 @@
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-dark bg-dark mb-4">
-        <div class="container"><span class="navbar-brand">COVACIEL 2026 - Télémétrie & Vidéo en Direct - VOITURE Groupe Hugo Oval</span></div>
+        <div class="container"><span class="navbar-brand">COVACIEL 2026 - Test Télémétrie & Vidéo en Direct - VOITURE {Nom du groupe}</span></div>
     </nav>
     <div class="container">
         <div class="row">
@@ -18,6 +18,7 @@
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">État du Véhicule (Télémétrie)</div>
                     <div class="card-body text-center">
+						<!-- Valeurs télémétriques mise à jour chaque seconde -->
                         <div class="telemetry-container">
                             <div class="telemetry-item fixed-column"><h6>Vitesse</h6><h2 id="txt-vitesse">0 km/h</h2></div>
                             <div class="telemetry-item fixed-column"><h6>Batterie</h6><h2 id="txt-batterie">0.0 V</h2></div>
@@ -43,15 +44,21 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
+				<!-- Courbe d'évolution de la vitesse dans le temps mise à jour chaque seconde -->
 				<div class="card shadow-sm mb-4">
 				<div class="card-header bg-secondary text-white">Evolution de la Vitesse</div>
                 <canvas id="chart-speed"></canvas>
 				</div>
             </div>
+			<!-- Flux vidéo caméra embarquée voiture avec image d'information en cas d'abscence de signal -->
             <div class="col-md-6">
 				<h1>Vidéo Caméra Embarquée</h1>
-                <div class="card shadow-sm bg-black"><iframe id="video-feed" src="http://172.17.50.94:8889/cam" onerror="this.src='img/no-signal.jpg';"></div>
+				<div class="card shadow-sm bg-black">
+					<img id="video-feed" 
+						 src="http://{IP_SERVEUR_RASPBERRY_VOITURE}:{PORT_CAMERA}/{STOCKAGE_CAMERA}" 
+						 onerror="this.onerror=null; this.src='img/no-signal.jpg';"> 
+				</div>
 			</div>
         </div>
     </div>
