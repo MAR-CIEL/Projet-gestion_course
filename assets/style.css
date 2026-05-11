@@ -1,32 +1,39 @@
+/**
+ * @file style.css
+ * @brief Charte graphique et styles CSS pour le Dashboard.
+ * @details Définit la mise en page responsive via Flexbox et les animations d'alerte 
+ * pour le respect du cahier des charges (ex: Article 6 sur l'immobilisation).
+ */
+
 /* Style général */
 body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 
 .card { border-radius: 12px; border: none; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 .card-header { font-weight: bold; border-top-left-radius: 12px !important; border-top-right-radius: 12px !important; }
 
-/* --- Container flexible pour les indicateurs (Mis à jour pour 6 éléments) --- */
+/** @section Telemetry_Layout Container flexible pour les 6 indicateurs */
 .telemetry-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Permet le passage à la ligne si besoin sur très petit écran */
+    flex-wrap: wrap;
     gap: 15px;
     padding: 10px 0;
 }
 
 .fixed-column {
-    min-width: 90px; /* Largeur fixe pour stabiliser l'affichage */
+    min-width: 90px;
     text-align: center;
-    flex: 1 1 20%; /* Permet aux éléments de se répartir sur plusieurs lignes si nécessaire */
+    flex: 1 1 20%;
 }
 
 h2 {
-    font-size: clamp(1rem, 2vw, 1.4rem) !important; /* Taille légèrement ajustée pour accueillir 6 éléments */
+    font-size: clamp(1rem, 2vw, 1.4rem) !important;
     white-space: nowrap !important;
     margin-top: 5px;
 }
 
-/* --- Animation Alerte Art. 6 --- */
+/** @section UX_Alerts Animation Alerte Art. 6 (Immobilisation) */
 .critical-alert {
     color: #e74c3c !important;
     font-weight: bold;
@@ -34,7 +41,7 @@ h2 {
 }
 @keyframes blinker { 50% { opacity: 0.3; } }
 
-/* --- Vidéo et Éléments UI --- */
+/* Vidéo et Caméra */
 #video-feed { 
     width: 100%; 
     min-height: 350px; 

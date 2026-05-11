@@ -1,3 +1,15 @@
+<?php
+/**
+ * @file index.php
+ * @brief Interface Utilisateur (IHM) du Dashboard Télémétrie & Vidéo.
+ * @details Cette page Web constitue le poste de contrôle pour un véhicule spécifique. 
+ * Elle affiche en temps réel les données reçues (vitesse, batterie, obstacles) et 
+ * le flux vidéo de la caméra embarquée.
+ * @author Candidat 4 - Responsable Télémétrie & UX
+ * @version 2.0
+ * @date 2026
+ */
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,7 +22,7 @@
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-dark bg-dark mb-4">
-        <div class="container"><span class="navbar-brand">COVACIEL 2026 - Test Télémétrie & Vidéo en Direct - VOITURE {Nom du groupe}</span></div>
+        <div class="container"><span class="navbar-brand">COVACIEL 2026 - Télémétrie & Vidéo en Direct - VOITURE {Nom du groupe}</span></div>
     </nav>
     <div class="container">
         <div class="row">

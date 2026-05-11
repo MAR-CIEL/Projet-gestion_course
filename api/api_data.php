@@ -1,12 +1,21 @@
 <?php
+/**
+ * @file api_data.php
+ * @brief API REST pour l'extraction des données SQL.
+ * @details Ce script se connecte à la base de données sur la VM Ubuntu et retourne 
+ * la ligne la plus récente de la table télémétrie au format JSON.
+ */
+
 header('Content-Type: application/json');
+
+/** @brief Paramètres de connexion à la VM Ubuntu */
 $conn = new mysqli("172.17.50.233", "candidat4", "Azerty123#", "covaciel_gestion"); // Connexion à la BDD
 
 if ($conn->connect_error) {
     die(json_encode(["error" => "Connexion VM Ubuntu impossible"]));
 }
 
-// Récupération des valeurs insérée
+/** @section Query Extraction de la télémétrie la plus récente */
 $sql = "SELECT vitesse, tension_batterie, consommation, obstacle, direction, acceleration, distance_parcourue FROM telemetrie ORDER BY id_mesure DESC LIMIT 1"; 
 $result = $conn->query($sql);
 
