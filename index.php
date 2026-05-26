@@ -66,10 +66,10 @@
 			<!-- Flux vidéo caméra embarquée voiture avec image d'information en cas d'abscence de signal -->
             <div class="col-md-6">
 				<h1>Vidéo Caméra Embarquée</h1>
-				<div class="card shadow-sm bg-black">
-					<img id="video-feed" 
-						 src="http://{IP_SERVEUR_RASPBERRY_VOITURE}:{PORT_CAMERA}/{STOCKAGE_CAMERA}" 
-						 onerror="this.onerror=null; this.src='img/no-signal.jpg';"> 
+				<div class="card shadow-sm bg-black"> <!-- exemple avec un des groupes collaboratifs de pilotage -->
+					<iframe id="video-feed" 
+						 src="http://192.168.1.7:8889/cam"
+						 onerror="this.onerror=null; this.src='img/no-signal.jpg';">
 				</div>
 			</div>
         </div>

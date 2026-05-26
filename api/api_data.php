@@ -9,7 +9,7 @@
 header('Content-Type: application/json');
 
 /** @brief Paramètres de connexion à la VM Ubuntu */
-$conn = new mysqli("172.17.50.233", "candidat4", "Azerty123#", "covaciel_gestion"); // Connexion à la BDD
+$conn = new mysqli("172.17.50.233", "candidat4", "Azerty123#", "covaciel_gestion"); // Connexion à la BDD (adapter au déploiement)
 
 if ($conn->connect_error) {
     die(json_encode(["error" => "Connexion VM Ubuntu impossible"]));
@@ -25,7 +25,7 @@ if ($row = $result->fetch_assoc()) {
         "tension_batterie" => floatval($row['tension_batterie']),
         "consommation" => floatval($row['consommation']),
         "obstacle" => intval($row['obstacle']),
-        "direction" => floatval($row['direction'])
+        "direction" => floatval($row['direction']),
 		"acceleration" => floatval($row['acceleration']),
         "distance" => floatval($row['distance_parcourue'])
     ]);
