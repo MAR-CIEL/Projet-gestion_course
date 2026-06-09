@@ -281,3 +281,10 @@ main {
     border-radius: 5px;
     border-left: 3px solid #3358D4;
 }
+
+/* Mise en évidence des tours complétés (temps enregistré par tag RFID) */
+.donnees-tours span.tour-complete {
+    color: #4ade80;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}

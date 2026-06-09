@@ -1,23 +1,12 @@
 #pragma once
-#include <iostream> // Pour les cin, cout, getline
-#include <string> // Pour creer des variables string
+#include <iostream>
+#include <string>
 #include <vector>
 #include <map>
-#include <chrono> // Pour le temps (high_resolution_clock, duration)
-#include <windows.h> // Pour Sleep
+#include <chrono>
+#include <windows.h>
 #include <fstream>
 
-using namespace std;
-using namespace std::chrono;
-/**
-* @file CChronometrage.h
-* @author Jalil BOUGOFFA
-* @date Debut : 15/1/2026
-* @version 1.0
-* @brief Fichier ayant les prototypes des fonctions du programme C++
-* @class CChronometre
-* Represente la solution de chronometrage
-*/
 class CChronometre
 {
 private:
@@ -26,16 +15,17 @@ private:
     int milliemesSecondes;
     int nombreVoitures;
 
-    HANDLE hSerial; 
-    high_resolution_clock::time_point start; 
-    map<string, int> tagsVoitures;
-    map<int, vector<string>> tempsParTours;
+    HANDLE hSerial;
+    std::chrono::high_resolution_clock::time_point start;
+    std::map<std::string, int> tagsVoitures;
+    std::map<int, std::vector<std::string> > tempsParTours; // Espace entre les > pour les vieux compilateurs
+    std::map<int, std::chrono::high_resolution_clock::time_point> dernierPassage;
 
 public:
     CChronometre();
     ~CChronometre();
-    void EnregistrementVoiture(int nb); 
+    void EnregistrementVoiture(int nb);
     void CalculerTempsCourse();
-    bool InitialiserPortSerie(string portName);
-    string FormaterTemps(double tempsTotal);
+    bool InitialiserPortSerie(std::string portName);
+    std::string FormaterTemps(double tempsTotal);
 };

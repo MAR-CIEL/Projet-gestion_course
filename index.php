@@ -19,15 +19,13 @@
         <section class="camera">
             <div id="camera-1">
                 <div class="card-body-p-0-bg-black">
-                    <iframe id="video-feed-1" src="http://172.17.50.94:8889/cam" frameborder="0" allowfullscreen>
-                    </iframe>
+                    <iframe id="video-feed-1" src="http://172.17.50.94:8889/cam" frameborder="0" allowfullscreen></iframe>
                 </div>
                 <div class="card-header">Caméra Voiture 1</div>
             </div>
             <div id="camera-2">
                 <div class="card-body-p-0-bg-black">
-                    <img id="video-feed-2" src="http://172.17.50.53:8080/?action=stream"
-                        onerror="this.src='img/no-signal.jpg';" style="width:100%;">
+                    <img id="video-feed-2" src="http://172.17.50.53:8080/?action=stream" alt="Caméra 2">
                 </div>
                 <div class="card-header">Caméra Voiture 2</div>
             </div>
@@ -35,8 +33,8 @@
 
         <div class="bas-page" id="bas-page">
             <section class="donnees-voitures">
-                <h3 class="titre-voiture" id="titre-voiture">Voiture n°</h3>
-                <!--Doit dépendre du numéro de la voiture-->
+                <h3 class="titre-voiture">Voiture n°</h3>
+
                 <div class="bloc-voiture-haut">
                     <div class="vitesse">
                         <h4 class="titre-donnee">Vitesse</h4>
@@ -64,6 +62,7 @@
                         <span>--:--:--</span>
                     </div>
                 </div>
+
                 <div class="card-header">Données Voitures</div>
             </section>
 
@@ -75,7 +74,11 @@
                     </div>
                     <div class="classement">
                         <h3 class="titre-donnee">Classement</h3>
-                        <p>1-----------<br />2-----------<br />3-----------</p>
+                        <p>
+                            1. Voiture 1 — 0 tour<br />
+                            2. Voiture 2 — 0 tour<br />
+                            3. Voiture 3 — 0 tour
+                        </p>
                     </div>
                 </div>
                 <div class="card-header">Données Course</div>
