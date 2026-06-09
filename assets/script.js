@@ -6,6 +6,14 @@ const fleetData = [
 ];
 
 let currentIndex = 0;
+let courseTerminee = false;
+
+window.addEventListener('load', () => {
+    fleetData.forEach(car => {
+        car.tours = ["--:--:--", "--:--:--", "--:--:--", "--:--:--"];
+    });
+    refreshCarUI(false);
+});
 
 function refreshCarUI(triggerAnim = false) {
     const car = fleetData[currentIndex];
@@ -61,6 +69,28 @@ function updateClassement() {
     }
 }
 
+function verifierCourseFinie() {
+    // Vérifier si toutes les voitures ont terminé leurs 4 tours
+    const toutesTerminees = fleetData.every(car => 
+        car.tours.filter(t => t !== "--:--:--").length === 4
+    );
+    
+    if (toutesTerminees && !courseTerminee) {
+        courseTerminee = true;
+        const txtChrono = document.getElementById("txt-chrono");
+        if (txtChrono) {
+            txtChrono.textContent = "COURSE TERMINÉE ! 🏁";
+            txtChrono.style.color = "#4ade80";
+        }
+        
+        // Afficher un message de fin
+        const classementEl = document.querySelector(".classement p");
+        if (classementEl) {
+            classementEl.innerHTML = "🏆 TOUS LES TOURS COMPLÉTÉS ! 🏆";
+        }
+    }
+}
+
 function fetchLiveRaceData() {
     fetch('data.php')
         .then(r => r.json())
@@ -75,31 +105,34 @@ function fetchLiveRaceData() {
             const toursPart = data.chrono.substring(sepIndex + 1).trim();
 
             const txtChrono = document.getElementById("txt-chrono");
-            if (txtChrono) txtChrono.textContent = chronoPart;
+            if (txtChrono && !courseTerminee) txtChrono.textContent = chronoPart;
 
-            // ===== EXTRACTION DES TEMPS (ULTRA ROBUSTE) =====
-            // On cherche TOUS les temps au format HH:MM:SS ou --:--:--
-            // Peu importe comment ils sont séparés
+            // ===== EXTRACTION DES TEMPS (TOUS LES TEMPS) =====
+            // Splitter par ; pour obtenir les 3 voitures
             if (toursPart) {
-                // Chercher tous les temps avec une regex
-                const allTimes = toursPart.match(/\d{2}:\d{2}:\d{3}|--:--:--/g) || [];
-                
-                // On devrait avoir 12 temps (4 tours × 3 voitures)
-                if (allTimes.length >= 12) {
-                    // Distribuer les temps aux voitures
-                    for (let voitureIdx = 0; voitureIdx < 3; voitureIdx++) {
-                        for (let tourIdx = 0; tourIdx < 4; tourIdx++) {
-                            const timeIdx = voitureIdx * 4 + tourIdx;
-                            const nouveauTemps = allTimes[timeIdx];
-                            
+                const toutesLesVoitures = toursPart.split(';');
+
+                toutesLesVoitures.forEach((v, carIndex) => {
+                    if (carIndex >= fleetData.length) return;
+                    if (!v || v.trim() === "") return;
+
+                    // Splitter par virgule pour obtenir les 4 tours
+                    const tempsTours = v.trim().split(',').map(t => t.trim());
+
+                    // On doit avoir exactement 4 temps
+                    if (tempsTours.length === 4) {
+                        for (let tourIndex = 0; tourIndex < 4; tourIndex++) {
+                            const nouveauTemps = tempsTours[tourIndex];
+                            // Figeage : on enregistre définitivement les vrais temps
                             if (nouveauTemps && nouveauTemps !== "--:--:--") {
-                                fleetData[voitureIdx].tours[tourIdx] = nouveauTemps;
+                                fleetData[carIndex].tours[tourIndex] = nouveauTemps;
                             }
                         }
                     }
-                }
+                });
 
                 updateClassement();
+                verifierCourseFinie();
             }
 
             // ===== TÉLÉMÉTRIE =====
@@ -114,6 +147,7 @@ function fetchLiveRaceData() {
                 }
             }
 
+            // ===== RAFRAÎCHIR L'AFFICHAGE =====
             refreshCarUI(false);
         })
         .catch(err => {
@@ -125,10 +159,12 @@ function fetchLiveRaceData() {
 document.addEventListener("DOMContentLoaded", () => {
     refreshCarUI(false);
 
+    // Rotation automatique entre les 3 voitures toutes les 5 secondes
     setInterval(() => {
         currentIndex = (currentIndex + 1) % fleetData.length;
         refreshCarUI(true);
-    }, 5000);
+    }, 500);
 
+    // Rafraîchissement des données toutes les 100ms
     setInterval(fetchLiveRaceData, 100);
 });
