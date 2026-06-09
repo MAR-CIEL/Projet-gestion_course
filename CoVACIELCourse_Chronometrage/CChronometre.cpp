@@ -176,24 +176,6 @@ void CChronometre::CalculerTempsCourse() {
             lastWrite = currentTime;
         }
 
-        bool tousTermines = true;
-        for (int i = 1; i <= nombreVoitures; i++) {
-            int toursCompletes = 0;
-            for (int t = 0; t < 4; t++) {
-                if (tempsParTours[i][t] != "--:--:--") toursCompletes++;
-            }
-            if (toursCompletes < 4) {
-                tousTermines = false;
-                break;
-            }
-        }
-
-        if (tousTermines) {
-            cout << "\n COURSE TERMINEE !\n";
-            cout << "Tous les tours ont ete completes. Arrêt du programme.\n";
-            exit(0); // Arrêter le programme
-        }
-
         Sleep(5);
     }
 }

@@ -8,13 +8,6 @@ const fleetData = [
 let currentIndex = 0;
 let courseTerminee = false;
 
-window.addEventListener('load', () => {
-    fleetData.forEach(car => {
-        car.tours = ["--:--:--", "--:--:--", "--:--:--", "--:--:--"];
-    });
-    refreshCarUI(false);
-});
-
 function refreshCarUI(triggerAnim = false) {
     const car = fleetData[currentIndex];
     if (!car) return;
@@ -56,15 +49,54 @@ function refreshCarUI(triggerAnim = false) {
     }
 }
 
+function timeToSeconds(timeStr) {
+    // Convertir "MM:SS:mmm" en secondes
+    if (timeStr === "--:--:--") return Infinity;
+    const parts = timeStr.split(':');
+    const minutes = parseInt(parts[0]);
+    const seconds = parseInt(parts[1]);
+    const millis = parseInt(parts[2]);
+    return minutes * 60 + seconds + millis / 1000;
+}
+
 function updateClassement() {
     const scores = fleetData
-        .map(car => ({ id: car.id, tours: car.tours.filter(t => t !== "--:--:--").length }))
-        .sort((a, b) => b.tours - a.tours);
+        .map(car => {
+            const toursCompletes = car.tours.filter(t => t !== "--:--:--").length;
+            let tempsTotal = Infinity;
+            
+            // Si tous les 4 tours sont complétés, utiliser le temps du dernier tour
+            if (toursCompletes === 4) {
+                tempsTotal = timeToSeconds(car.tours[3]);
+            }
+            
+            return { 
+                id: car.id, 
+                tours: toursCompletes,
+                tempsTotal: tempsTotal,
+                dernierTemps: car.tours[3]
+            };
+        })
+        // Trier : d'abord les voitures avec 4 tours (par temps), puis les autres (par nombre de tours)
+        .sort((a, b) => {
+            if (a.tours === 4 && b.tours === 4) {
+                return a.tempsTotal - b.tempsTotal;
+            }
+            if (a.tours === 4) return -1;
+            if (b.tours === 4) return 1;
+            return b.tours - a.tours;
+        });
 
     const classementEl = document.querySelector(".classement p");
     if (classementEl) {
         classementEl.innerHTML = scores
-            .map((s, i) => `${i + 1}. Voiture ${s.id} — ${s.tours} tour${s.tours > 1 ? "s" : ""}`)
+            .map((s, i) => {
+                if (s.tours === 4) {
+                    return `${i + 1}. Voiture ${s.id} — 4 tours — Temps: ${s.dernierTemps}`;
+                } else {
+                    return `${i + 1}. Voiture ${s.id} — ${s.tours} tour${s.tours > 1 ? "s" : ""}`;
+                }
+            })
             .join("<br/>");
     }
 }
@@ -163,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
         currentIndex = (currentIndex + 1) % fleetData.length;
         refreshCarUI(true);
-    }, 500);
+    }, 5000);
 
     // Rafraîchissement des données toutes les 100ms
     setInterval(fetchLiveRaceData, 100);
