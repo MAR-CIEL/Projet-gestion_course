@@ -1,0 +1,331 @@
+:root {
+    --sidebar-bg: #fff5f5; /* Rose très pâle de tes captures */
+    --active-color: #ffffff;
+    --border-color: #d1d1d1;
+    --btn-start: #32cd32;
+    --btn-stop: #ff3131;
+    --btn-danger: #d4e157;
+    --btn-blue: #5499ff;
+}
+
+body {
+    display: flex;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+}
+
+.nav-links li {
+    padding: 15px 20px;
+    border: 1px solid black;
+    margin-bottom: -1px; /* Pour éviter les doubles bordures */
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.nav-links li.active {
+    background-color: #fce4ec;
+}
+
+.settings {
+    margin-top: auto;
+    padding: 20px;
+    font-size: 24px;
+}
+
+/* Main Content */
+.content {
+    flex: 1;
+    padding: 20px 50px;
+    position: relative;
+}
+
+.main-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.car-icon { width: 80px; }
+
+/* Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--sidebar-bg);
+    padding: 20px;
+    border: none;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+}
+
+.wide { grid-column: span 2; }
+
+/* Buttons & Elements */
+.btn-group { display: flex; gap: 10px; }
+.btn {
+    flex: 1;
+    border: none;
+    color: white;
+    cursor: pointer;
+	padding: 10px;
+	/* police d'écriture */
+    font-weight: bold;
+	display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+.btn-start { background-color: var(--btn-start); }
+.btn-stop { background-color: var(--btn-stop); }
+
+.status-box {
+    margin-top: 15px;
+    background: #d9d9d9;
+    padding: 10px;
+    height: 40px;
+}
+
+/* Tableau classement */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+/* Alerts */
+.alert {
+    padding: 15px;
+    margin-bottom: 10px;
+	/* police d'écriture */
+    font-weight: bold;
+	cursor: pointer;
+	display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+.danger { background-color: var(--btn-danger); color: white;}
+.overtaking { background-color: var(--btn-blue); color: white; }
+.btn-disqualify {
+    background: rgb(255, 99, 0);
+    color: white;
+    border: none;
+}
+.btn-pisteda {
+	background: rgb(150, 0, 0);
+    color: white;
+	border: none;
+}
+
+/* Navigation Footer */
+.navigation-footer {
+    position: absolute;
+    bottom: 30px;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-btn {
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+}
+
+.back { background-color: var(--btn-stop); }
+.validate { background-color: var(--btn-start); }
+
+/* Style spécifique pour l'accueil */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh; /* Centre verticalement dans la page */
+}
+
+.btn-new-course {
+    background-color: #27ae60; /* Le vert de ton Figma */
+    color: white;
+    text-decoration: none;
+    font-size: 2.5rem;
+    padding: 60px 100px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.btn-new-course:hover {
+    background-color: #2ecc71;
+    transform: scale(1.02);
+}
+
+.car-logo-header {
+    display: block;
+    margin: 0 auto 10px;
+    width: 120px;
+}
+
+/* Mise en page de la grille de config */
+.setup-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 50px;
+}
+
+.setup-card {
+    background-color: #fff8f8; /* Le rose très pâle de tes captures */
+    padding: 30px;
+    border-radius: 5px;
+    min-height: 150px;
+}
+
+.setup-card h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+
+/* Champs spécifiques */
+.input-field {
+    width: 90%;
+    height: 40px;
+    border: none;
+    background-color: #e0e0e0;
+}
+
+.add-row {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.dark-input {
+    background-color: #707070;
+    color: white;
+    padding: 10px 20px;
+    flex: 1;
+}
+
+.plus-btn {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.gray-box {
+    background-color: #d9d9d9;
+    padding: 10px;
+    width: fit-content;
+}
+
+/* Boutons fléchés en bas */
+.footer-nav {
+    position: fixed;
+    bottom: 50px;
+    width: calc(100% - 250px);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+.arrow-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn-back { background-color: #f44336; } /* Rouge pour retour */
+.btn-validate { background-color: #27ae60; } /* Vert pour valider */
+
+.footer-nav {
+    position: fixed;
+    bottom: 30px;
+    left: 200px; /* Largeur de ta sidebar */
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px; /* Marge interne pour que les boutons ne touchent pas les bords */
+    box-sizing: border-box;
+}
+
+.arrow-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    transition: 0.2s;
+}
+
+/* Bouton Retour (Rouge) */
+.btn-back {
+    background-color: #e74c3c;
+}
+
+/* Bouton Valider (Vert) */
+.btn-validate {
+    background-color: #27ae60;
+    /* On s'assure qu'il y a assez de place pour le texte + la flèche */
+    min-width: 150px; 
+    justify-content: center;
+}
+
+/* Création des flèches en pur CSS (plus simple que des images) */
+.arrow-shape {
+    width: 0; 
+    height: 0; 
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+.left { border-right: 15px solid white; }
+.right { border-left: 15px solid white; }
+
+.arrow-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
