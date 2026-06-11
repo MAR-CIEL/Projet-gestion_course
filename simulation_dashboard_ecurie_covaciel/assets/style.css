@@ -1,0 +1,148 @@
+/**
+ * @file style.css
+ * @brief Charte graphique et mise en page responsive du Dashboard d'Écurie.
+ * @details Gère l'affichage en grille des capteurs de télémétrie, la mise en valeur 
+ * des éléments du chronométrage et les animations d'alerte visuelle (Article 6).
+ * @author Candidat 4 - Responsable Télémétrie & UX
+ * @version 2.5
+ * @date 2026
+ */
+
+/* ============================================================================
+   1. STYLES GÉNÉRAUX & RESET
+   ============================================================================ */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+}
+
+h1, h6 {
+    font-weight: 600;
+    color: #34495e;
+}
+
+/* Customisation de la police à espacement fixe pour les chiffres du chrono */
+.font-monospace {
+    font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* ============================================================================
+   2. COMPOSANTS DE L'IHM (CARDS ET CONTAINERS)
+   ============================================================================ */
+.card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+}
+
+.card-header {
+    font-weight: bold;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+    padding: 12px 20px;
+}
+
+/* Ajustement de la boîte vidéo de la caméra embarquée */
+.bg-black {
+    background-color: #111111 !important;
+}
+
+#video-feed {
+    border-radius: 0 0 12px 12px;
+    max-height: 480px;
+}
+
+/* ============================================================================
+   3. GRILLE DE TÉLÉMÉTRIE DYNAMIQUE
+   ============================================================================ */
+/** @section Telemetry_Layout Container flexible pour aligner les blocs physiques */
+.telemetry-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.fixed-column {
+    min-width: 100px;
+    text-align: center;
+    flex: 1 1 22%;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Ajustement des tailles d'indicateurs de capteurs */
+.telemetry-container h2 {
+    font-size: clamp(1.1rem, 2vw, 1.5rem) !important;
+    white-space: nowrap !important;
+    margin-top: 5px;
+    font-weight: 700;
+}
+
+.telemetry-container h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+/* ============================================================================
+   4. STRUCTURE DU CHRONOMÉTRAGE & CLASSES DU T3
+   ============================================================================ */
+#txt-chrono {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+}
+
+#txt-classement {
+    line-height: 1.5;
+    font-size: 0.9rem;
+    min-height: 72px; /* Évite les sauts de mise en page lors des rafraîchissements */
+    border-left: 3px solid #f1c40f; /* Liseré jaune d'ambiance course */
+}
+
+/* Ajustement des petites cellules d'historique de tours */
+#chrono-t1, #chrono-t2, #chrono-t3, #chrono-t4 {
+    font-size: 0.95rem;
+}
+
+/* ============================================================================
+   5. ALERTES ET ANIMATIONS UX (REGLEMENTATION ET QUALITÉ)
+   ============================================================================ */
+/** @section UX_Alerts Animation Alerte Art. 6 (Immobilisation du véhicule) */
+.critical-alert {
+    color: #e74c3c !important; /* Rouge vif d'alarme */
+    font-weight: bold;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker { 
+    50% { opacity: 0.2; } 
+}
+
+/* Jauge d'énergie : transition fluide lors des variations de tension */
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+    font-size: 0.85rem;
+}
+
+/* Conteneur pour forcer Chart.js à respecter une hauteur lisible */
+.chart-container {
+    height: 220px !important; 
+    position: relative;
+    border-radius: 12px;
+    border: none;
+}
+
+/* Ajustement du canvas interne */
+#chart-speed {
+    width: 100% !important;
+    height: 100% !important;
+}
