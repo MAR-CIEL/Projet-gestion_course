@@ -1,1 +1,1 @@
-# Repo du projet E6 de BTS 2 CIEL IR : Mise en place d'un système complet de gestion de la course, dans le cadre du concours COVACIEL 2026, en collaboration transversale avec les groupes de pilotage des voitures
+# Repo du projet E6 de BTS 2 CIEL IR : Mise en place d'un système complet de gestion de la course, dans le cadre du concours COVACIEL 2026, en collaboration transversale avec les groupes de pilotage des voitures autonomes
